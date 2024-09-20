@@ -280,7 +280,7 @@ type HarmonyNotification struct {
 // 多媒体设置,最多可设置3个子项
 type Multimedia struct {
 	Url      string `json:"url"`                 // 必须，多媒体资源地址
-	Type     int    `json:"type"`                // 必须，资源类型（1.图片，2.音频，3.视频）
+	Type     int    `json:"type"`                // 必须，资源类型（1.图片，2.音频，3.视频）~
 	OnlyWifi bool   `json:"only_wifi,omitempty"` // 非必须，是否只在wifi环境下加载，如果设置成true,但未使用wifi时，会展示成普通通知
 }
 
