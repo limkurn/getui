@@ -79,15 +79,17 @@ type Strategy struct {
 	 * 2: 表示该消息只通过厂商通道策略下发，不考虑用户是否在线;
 	 * 3: 表示该消息只通过个推通道下发，不考虑用户是否在线；
 	 * 4: 表示该消息优先从厂商通道下发，若消息内容在厂商通道代发失败后会从个推通道下发。
-	 * 其中名称可填写: ios、st、hw、xm、vv、mz、op，
+	 * 其中名称可填写: ios、st、hw、xm、vv、mz、op、hoshw，
 	 */
-	Ios int `json:"ios,omitempty"` // 非必须，ios通道策略1-4，表示含义同上，要推送ios通道，需要在个推开发者中心上传ios证书，建议填写2或4，否则可能会有消息不展示的问题
-	St  int `json:"st,omitempty"`  // 非必须，通道策略1-4，表示含义同上，需要开通st厂商使用该通道推送消息
-	Hw  int `json:"hw,omitempty"`  // 非必须，通道策略1-4，表示含义同上
-	Xm  int `json:"xm,omitempty"`  // 非必须，通道策略1-4，表示含义同上
-	Vv  int `json:"vv,omitempty"`  // 非必须，通道策略1-4，表示含义同上
-	Mz  int `json:"mz,omitempty"`  // 非必须，通道策略1-4，表示含义同上
-	Op  int `json:"op,omitempty"`  // 非必须，通道策略1-4，表示含义同上
+	Ios   int `json:"ios,omitempty"`   // 非必须，ios通道策略1-4，表示含义同上，要推送ios通道，需要在个推开发者中心上传ios证书，建议填写2或4，否则可能会有消息不展示的问题
+	St    int `json:"st,omitempty"`    // 非必须，通道策略1-4，表示含义同上，需要开通st厂商使用该通道推送消息
+	Hw    int `json:"hw,omitempty"`    // 非必须，通道策略1-4，表示含义同上
+	Xm    int `json:"xm,omitempty"`    // 非必须，通道策略1-4，表示含义同上
+	Vv    int `json:"vv,omitempty"`    // 非必须，通道策略1-4，表示含义同上
+	Mz    int `json:"mz,omitempty"`    // 非必须，通道策略1-4，表示含义同上
+	Op    int `json:"op,omitempty"`    // 非必须，通道策略1-4，表示含义同上
+	Hoshw int `json:"hoshw,omitempty"` // 非必须，通道策略1-4，表示含义同上
+	Hm    int `json:"hm,omitempty"`    // 非必须，鸿蒙通道策略1-4，表示含义同上
 }
 
 // 个推推送消息参数
@@ -144,6 +146,16 @@ type Notification struct {
 	 * none：纯通知，无后续动作
 	 */
 	Intent string `json:"intent,omitempty"`
+	// 针对鸿蒙系统设置点击通知打开应用特定页面，长度 ≤ 4096字，通知带want传递参数（json格式）
+	// 其中parameters部分为附加参数（json格式），非必填，action、uri二选一，bundleName必填，abilityName为非必填
+	Want string `json:"want,omitempty"`
+	// 设置鸿蒙通知渠道类型
+	// 0：未知类型
+	// 1：社交通信
+	// 2：服务提醒
+	// 3：内容咨询
+	// 5：客服消息
+	SlotType string `json:"slot_type,omitempty"`
 	/*
 	 * click_type为intent时必填
 	 * 点击通知打开应用特定页面，长度 ≤ 2048
@@ -201,6 +213,7 @@ type Revoke struct {
 type PushChannel struct {
 	Ios     *IosChannel     `json:"ios,omitempty"`     // 非必须，ios通道推送消息内容
 	Android *AndroidChannel `json:"android,omitempty"` // 非必须，android通道推送消息内容
+	Harmony *HarmonyChannel `json:"harmony,omitempty"` // 非必须，harmony通道推送消息内容
 }
 
 // ios厂商通道消息
@@ -243,6 +256,25 @@ type Alert struct {
 	SubTitle        string   `json:"sub_title,omitempty"`         // 非必须，通知子标题,仅支持iOS8.2以上版本
 	SubTitleLocKey  string   `json:"subtitle-loc-key,omitempty"`  // 非必须，当前本地化文件中的子标题字符串的关键字,仅支持iOS8.2以上版本
 	SubTitleLocArgs []string `json:"subtitle-loc-args,omitempty"` // 非必须，当前本地化子标题内容中需要置换的变量参数 ,仅支持iOS8.2以上版本
+}
+
+type HarmonyChannel struct {
+	Notification *HarmonyNotification `json:"notification"` // 非必须,通知消息内容，与transmission 二选一，两个都填写时报错
+	TransMission string               `json:"transmission"` // 非必须,透传消息内容，与notification 二选一，两个都填写时报错，长度 ≤ 3072
+	Options      *HarmonyOptions      `json:"options"`      // 非必须, 鸿蒙推送选项
+}
+
+type HarmonyOptions struct {
+	HW map[string]bool `json:"HW,omitempty"` // 非必须, 鸿蒙特定选项
+}
+
+type HarmonyNotification struct {
+	Title     string `json:"title"`             // 通知消息标题
+	Body      string `json:"body"`              // 通知消息内容
+	Category  string `json:"category"`          // 通知类别
+	ClickType string `json:"click_type"`        // 点击后的行为类型
+	Want      string `json:"want,omitempty"`    // 点击通知打开应用特定页面，长度 ≤ 4096字，通知带want传递参数（json格式），允许为空
+	PayLoad   string `json:"payload,omitempty"` // 点击通知加自定义消息，长度 ≤ 3072，允许为空
 }
 
 // 多媒体设置,最多可设置3个子项
