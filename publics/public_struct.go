@@ -265,7 +265,7 @@ type HarmonyChannel struct {
 }
 
 type HarmonyOptions struct {
-	HW map[string]bool `json:"HW,omitempty"` // 非必须, 鸿蒙特定选项
+	HW map[string]interface{} `json:"HW,omitempty"` // 非必须, 鸿蒙特定选项
 }
 
 type HarmonyNotification struct {
