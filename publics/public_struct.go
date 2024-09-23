@@ -294,3 +294,13 @@ type Ups struct {
 	Notification *Notification `json:"notification"` // 非必须,通知消息内容，与transmission 二选一，两个都填写时报错
 	TransMission string        `json:"transmission"` // 非必须,透传消息内容，与notification 二选一，两个都填写时报错，长度 ≤ 3072
 }
+
+// want 结构体{"deviceId":"","bundleName":"com.bthhotels.app","abilityName":"EntryAbility","uri": target_url,"action":"","parameters":{}}
+type Want struct {
+	DeviceId    string            `json:"deviceId"`
+	BundleName  string            `json:"bundleName"`
+	AbilityName string            `json:"abilityName"`
+	Uri         string            `json:"uri"`
+	Action      string            `json:"action"`
+	Parameters  map[string]string `json:"parameters"`
+}
