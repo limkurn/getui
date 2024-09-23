@@ -177,8 +177,8 @@ type Notification struct {
 	 */
 
 	// options为push_channel厂商通道中安卓专有
-	Options *Options `json:"options,omitempty"` // 第三方厂商通知扩展内容
-
+	Options  *Options `json:"options,omitempty"`  // 第三方厂商通知扩展内容
+	Category string   `json:"category,omitempty"` // 消息分类，0 代表运营消息，1代表系统消息，不填默认为0
 }
 
 type Options struct {
